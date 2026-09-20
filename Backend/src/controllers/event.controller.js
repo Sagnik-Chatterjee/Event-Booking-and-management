@@ -52,4 +52,6 @@ const posterLocalPath=req.file?.path
 })
 
 
+
+
 export {getEventsByCity,addEvent}
