@@ -3,8 +3,12 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/userRoutes.js"
 import eventRouter from "./routes/eventRoutes.js"
 import adminRouter from "./routes/adminRoutes.js"
+import cors from "cors"
 const app=express();
-
+app.use(cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true
+}))
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended:true,limit:"16kb"}))

@@ -1,0 +1,140 @@
+.auth-page-wrapper {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f4f6f8;
+    padding: 30px 20px;
+}
+
+.register-card-box {
+    width: 100%;
+    max-width: 450px;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.auth-title {
+    margin: 0 0 30px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #222222;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.text-input-box {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d5d5d5;
+    border-radius: 7px;
+    font-size: 15px;
+    color: #222222;
+    background: #ffffff;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.text-input-box::placeholder {
+    color: #aaaaaa;
+}
+
+.text-input-box:focus {
+    border-color: #333333;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+.auth-submit-btn {
+    width: 100%;
+    padding: 13px 16px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 7px;
+    background: #222222;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.auth-submit-btn:hover {
+    background: #000000;
+}
+
+.auth-submit-btn:active {
+    transform: scale(0.99);
+}
+
+.auth-submit-btn:disabled {
+    background: #999999;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.auth-error-alert {
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border-radius: 7px;
+    background: #ffe8e8;
+    border: 1px solid #ffcccc;
+    color: #c62828;
+    font-size: 14px;
+    text-align: center;
+}
+
+.auth-redirect-footer {
+    margin: 25px 0 0;
+    text-align: center;
+    font-size: 14px;
+    color: #666666;
+}
+
+.footer-link {
+    color: #222222;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 3px;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
+}
+
+
+/* Responsive Design */
+
+@media (max-width: 500px) {
+    .auth-page-wrapper {
+        padding: 20px 15px;
+    }
+
+    .register-card-box {
+        padding: 30px 22px;
+    }
+
+    .auth-title {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+}
