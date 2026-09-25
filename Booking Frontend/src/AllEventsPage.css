@@ -1,0 +1,129 @@
+.events-list {
+  list-style: none;
+  padding: 0;
+  margin: 40px auto;
+  width: 90%;
+  max-width: 1200px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+/* Event Card */
+.event-card {
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+
+  border: 1px solid #eeeeee;
+}
+
+.event-card:hover {
+  transform: translateY(-6px);
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+}
+
+/* Event Poster */
+.event-card img {
+  width: 100%;
+  height: 220px;
+
+  display: block;
+
+  object-fit: cover;
+  background-color: #f2f2f2;
+}
+
+/* Information section */
+.event-info {
+  padding: 20px;
+}
+
+/* Event title */
+.event-info h3 {
+  margin: 0 0 16px;
+
+  font-size: 21px;
+  font-weight: 600;
+
+  color: #222222;
+
+  line-height: 1.3;
+}
+
+/* Owner and Date */
+.event-info p {
+  margin: 9px 0;
+
+  font-size: 15px;
+  line-height: 1.5;
+
+  color: #666666;
+}
+
+/* Labels */
+.event-info strong {
+  color: #333333;
+  font-weight: 600;
+}
+
+/* Date */
+.event-info p:last-child {
+  margin-top: 12px;
+
+  color: #555555;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .events-list {
+    width: 92%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .event-card img {
+    height: 200px;
+  }
+
+  .event-info {
+    padding: 16px;
+  }
+
+  .event-info h3 {
+    font-size: 19px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 550px) {
+  .events-list {
+    width: 90%;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .event-card img {
+    height: 220px;
+  }
+
+  .event-info {
+    padding: 18px;
+  }
+
+  .event-info h3 {
+    font-size: 20px;
+  }
+
+  .event-info p {
+    font-size: 14px;
+  }
+}

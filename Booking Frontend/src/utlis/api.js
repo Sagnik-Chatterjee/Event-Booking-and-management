@@ -18,19 +18,18 @@ api.interceptors.response.use(
 
       try {
         console.log("Access token expired. Attempting silent refresh...");
-        await axios.post(
-          `${apiUrl}/user/refresh-token`, 
-          {}, 
+        const response= await axios.get(
+          `http://localhost:8000/user/refreshToken`,
           { withCredentials: true }
         );
-
         console.log("Token refreshed successfully! Retrying original request...");
+        console.log(response.data)
         return api(originalRequest); 
       } catch (refreshError) {
         console.error("Refresh token expired. Force logging out user...");
         
 
-        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("user");
         
         window.location.href = "/login";
         return Promise.reject(refreshError);
