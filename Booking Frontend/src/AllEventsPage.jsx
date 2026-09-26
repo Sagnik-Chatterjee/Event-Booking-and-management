@@ -2,8 +2,11 @@ import { useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { useState } from "react"
 import api from "./utlis/api.js"
+import Navbar from "./Navbar.jsx"
 import "./AllEventsPage.css"
+import { useNavigate } from "react-router-dom"
 export default function AllEvents(){
+  const navigate=useNavigate()
     const [events,setEvents]=useState([])
 const {city}=useParams()
 useEffect(()=>{
@@ -15,6 +18,7 @@ useEffect(()=>{
         getEvents()
     },[city])
 return <>
+<Navbar/>
 <h1>{city}</h1>
 <ul className="events-list">
   {events.map((e) => {
@@ -25,14 +29,16 @@ return <>
     });
 
     return (
-      <li className="event-card" key={e._id}>
+      <li className="event-card" key={e._id} onClick={()=>{
+        navigate(`/view/event/${e._id}`)
+      }}>
         <img src={e.posterUrl} alt={e.title} />
 
         <div className="event-info">
           <h3>{e.title}</h3>
 
           <p>
-            <strong>Owner:</strong> {e.owner}
+            <strong>Owner:</strong> {e.owner.fullName}
           </p>
 
           <p>
