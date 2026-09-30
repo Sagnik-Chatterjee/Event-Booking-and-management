@@ -6,6 +6,9 @@ import SetCity from './setCity.jsx'
 import AllEvents from './AllEventsPage.jsx'
 import AddEventPage from './AddEventPage.jsx'
 import { EventPage } from './EventPage.jsx'
+import { AdminDashboard } from './AdminDashboard.jsx'
+import { PendingEventsPage } from './PendinEventsPage.jsx'
+import { ExpiredEventsPage } from './ExpiredEventsPage.jsx'
 import './App.css'
 
 function App() {
@@ -19,6 +22,9 @@ function App() {
       <Route path='/city/:city' element={<AllEvents/>}></Route>
       <Route path='/add-event' element={<AddEventPage/>}></Route>
       <Route path='/view/event/:id' element={<EventPage/>}></Route>
+      <Route path='/admin' element={<AdminDashboard/>}></Route>
+      <Route path='/admin/pending-events' element={<PendingEventsPage/>}></Route>
+      <Route path='/admin/expired-events' element={<ExpiredEventsPage/>}></Route>
     </Routes>
     </BrowserRouter>
   )

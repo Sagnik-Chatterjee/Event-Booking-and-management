@@ -1,0 +1,161 @@
+/* Main Dashboard */
+.admin-dashboard {
+  min-height: 100vh;
+  padding: 50px 30px;
+  box-sizing: border-box;
+
+  background: #f5f7fb;
+  font-family: Arial, sans-serif;
+}
+
+/* Heading */
+.admin-dashboard-title {
+  max-width: 1000px;
+  margin: 0 auto 35px;
+
+  color: #22223b;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Statistics Layout */
+.admin-stats-container {
+  max-width: 900px;
+  margin: 0 auto 35px;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 25px;
+}
+
+/* Statistic Cards */
+.admin-stat-card {
+  padding: 30px;
+  border-radius: 14px;
+  background: #ffffff;
+
+  border: 1px solid #e8eaf0;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.09);
+}
+
+/* Statistic Labels */
+.admin-stat-label {
+  margin-bottom: 15px;
+
+  color: #6b7280;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Statistic Values */
+.admin-stat-value {
+  color: #27245f;
+  font-size: 38px;
+  font-weight: 700;
+}
+
+/* User Card Accent */
+.users-card {
+  border-top: 4px solid #4f46e5;
+}
+
+/* Event Card Accent */
+.events-card {
+  border-top: 4px solid #0d9488;
+}
+
+/* Action Buttons Container */
+.admin-actions {
+  max-width: 900px;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+/* Common Button Styles */
+.admin-action-btn {
+  min-width: 220px;
+  padding: 14px 22px;
+
+  border: none;
+  border-radius: 8px;
+
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.admin-action-btn:hover {
+  transform: translateY(-2px);
+}
+
+.admin-action-btn:active {
+  transform: translateY(0);
+}
+
+/* Pending Events */
+.pending-btn {
+  background: #4f46e5;
+}
+
+.pending-btn:hover {
+  background: #4338ca;
+}
+
+/* Expired Events */
+.expired-btn {
+  background: #e05a47;
+}
+
+.expired-btn:hover {
+  background: #c74635;
+}
+
+/* Tablet and Mobile */
+@media (max-width: 600px) {
+  .admin-dashboard {
+    padding: 35px 18px;
+  }
+
+  .admin-dashboard-title {
+    font-size: 26px;
+    margin-bottom: 25px;
+  }
+
+  .admin-stats-container {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .admin-stat-card {
+    padding: 24px;
+  }
+
+  .admin-stat-value {
+    font-size: 32px;
+  }
+
+  .admin-actions {
+    flex-direction: column;
+  }
+
+  .admin-action-btn {
+    width: 100%;
+    min-width: 0;
+  }
+}

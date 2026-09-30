@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Event} from "../models/event.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -60,7 +61,7 @@ const posterLocalPath=req.file?.path
 })
 const getEventById=asyncHandler(async(req,res)=>{
     const {id}=req.params
-    const event=await Event.findById(id).populate({path: "owner",select: "-password -refreshToken"});
+    const event=await Event.find({_id:new mongoose.Types.ObjectId(id),status:"Confirmed"}).populate({path: "owner",select: "-password -refreshToken"});
     if(!event){
         throw new ApiError(400,"Event does not exist")
     }

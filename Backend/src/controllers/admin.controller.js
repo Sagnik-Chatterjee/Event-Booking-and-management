@@ -19,7 +19,7 @@ const getNoOfUsersAndEvents= asyncHandler(async(req,res)=>{
 })
 const getPendingRoutes=asyncHandler(async(req,res)=>{
     try {
-        const events=await Event.find({status:"Pending",date:{$gte:new Date()}})
+        const events=await Event.find({status:"Pending",date:{$gte:new Date()}}).populate({path: "owner",select: "-password -refreshToken"})
         if (!events){
             throw new ApiError(500,"Something went wrong")
         }

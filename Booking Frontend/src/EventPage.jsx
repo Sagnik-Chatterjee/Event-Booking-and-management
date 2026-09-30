@@ -10,7 +10,8 @@ export function EventPage(){
     useEffect(()=>{
         const getEvent=async()=>{
             const response=await api.get(`http://localhost:8000/events/event/${id}`)
-            setEvent(response.data.data)
+            console.log(response.data.data[0])
+            setEvent(response.data.data[0])
         }
         getEvent()
     },[id])
