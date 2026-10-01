@@ -3,8 +3,10 @@ import { useEffect } from "react"
 import { useState } from "react"
 import api from "./utlis/api.js"
 import Navbar from "./Navbar"
+import { useNavigate } from "react-router-dom"
 import "./EventPage.css"
 export function EventPage(){
+  const navigate=useNavigate()
     const {id}=useParams()
     const [event,setEvent]=useState({})
     useEffect(()=>{
@@ -93,7 +95,7 @@ export function EventPage(){
 
           </div>
 
-          <button className="book-tickets-btn">
+          <button className="book-tickets-btn" onClick={()=>navigate(`/view/seatlayout/${event._id}`)}>
             Book Tickets
           </button>
 

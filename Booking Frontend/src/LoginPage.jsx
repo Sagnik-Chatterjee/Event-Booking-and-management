@@ -1,12 +1,13 @@
 import api from "./utlis/api.js"
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
+    const navigate=useNavigate()
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -32,8 +33,7 @@ const Login = () => {
                 JSON.stringify(response.data.data.user)
             );
 
-            console.log("Login successful");
-            console.log(response.data.data.user);
+            navigate("/")
 
         } catch (error) {
             setError(
