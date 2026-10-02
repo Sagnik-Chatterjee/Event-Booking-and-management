@@ -6,38 +6,48 @@ const api = axios.create({
   withCredentials: true,
 });
 
+let refreshPromise = null;
+
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error) => {
-    const originalRequest = error.config;
+    (response) => response,
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; 
+    async (error) => {
+        const originalRequest = error.config;
 
-      try {
-        console.log("Access token expired. Attempting silent refresh...");
-        const response= await axios.get(
-          `http://localhost:8000/user/refreshToken`,
-          { withCredentials: true }
-        );
-        console.log("Token refreshed successfully! Retrying original request...");
-        console.log(response.data)
-        return api(originalRequest); 
-      } catch (refreshError) {
-        console.error("Refresh token expired. Force logging out user...");
-        
+        if (
+            error.response?.status === 401 &&
+            !originalRequest._retry
+        ) {
+            originalRequest._retry = true;
 
-        localStorage.removeItem("user");
-        
-        window.location.href = "/login";
-        return Promise.reject(refreshError);
-      }
+            try {
+                if (!refreshPromise) {
+                    refreshPromise = axios
+                        .get(
+                            "http://localhost:8000/user/refreshToken",
+                            {
+                                withCredentials: true
+                            }
+                        )
+                        .finally(() => {
+                            refreshPromise = null;
+                        });
+                }
+
+                await refreshPromise;
+
+                return api(originalRequest);
+
+            } catch (refreshError) {
+                localStorage.removeItem("user");
+                window.location.href = "/login";
+
+                return Promise.reject(refreshError);
+            }
+        }
+
+        return Promise.reject(error);
     }
-
-    return Promise.reject(error);
-  }
 );
 
 export default api;
