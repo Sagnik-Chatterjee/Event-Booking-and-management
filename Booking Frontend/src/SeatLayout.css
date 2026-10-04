@@ -255,6 +255,28 @@
   font-size: 18px;
 }
 
+.checkout-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.checkout-button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 7px;
+  background: #2563eb;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.checkout-button:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
 
 /* MOBILE */
 

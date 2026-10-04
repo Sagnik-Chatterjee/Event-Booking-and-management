@@ -2,13 +2,14 @@ import { useState,useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "./Navbar.jsx"
 import api from "./utlis/api.js";
+import { useSeatContext } from "./context/SeatContext.jsx";
 import "./SeatLayout.css"
 export function SeatLayout(){
     const {id}=useParams()
     const[event,setEvent]=useState({})
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const selectedSeats=[]
+    const {selectedSeats,setSelectedSeats}=useSeatContext()
     useEffect(()=>{
         const getEvent=async()=>{
             try{
@@ -24,8 +25,9 @@ export function SeatLayout(){
         getEvent()
     },[id])
     function handleSelectSeat(rowName,seatNumber){
-        console.log(rowName)
-        console.log(seatNumber)
+        setSelectedSeats((prev)=>
+          prev.includes(seatNumber)? prev.filter((existing)=>existing!==seatNumber): [...prev,seatNumber]
+        )
     }
 
     if (loading) {
@@ -148,6 +150,19 @@ export function SeatLayout(){
           <strong>Total Price:</strong>{" "}
           ₹{selectedSeats.length * event.price}
         </p>
+        {selectedSeats.length > 0 && (
+  <div className="checkout-section">
+    <button
+      type="button"
+      className="checkout-button"
+      onClick={() => {
+        console.log("Proceed to checkout")
+      }}
+    >
+      Proceed to Checkout
+    </button>
+  </div>
+)}
 
       </div>
 

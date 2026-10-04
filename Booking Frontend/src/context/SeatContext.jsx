@@ -10,4 +10,4 @@ export const SeatContextProvider=({children})=>{
         </SeatContext.Provider>
     )
 }
-export const useSeatContext=()=> useContext(SeatContext)
+export const useSeatContext= ()=> useContext(SeatContext)
