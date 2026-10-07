@@ -10,6 +10,7 @@ import { AdminDashboard } from './AdminDashboard.jsx'
 import { PendingEventsPage } from './PendinEventsPage.jsx'
 import { ExpiredEventsPage } from './ExpiredEventsPage.jsx'
 import { SeatLayout } from './SeatLayout.jsx'
+import { CheckoutPage } from './CheckoutPage.jsx'
 import './App.css'
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
       <Route path='/admin/pending-events' element={<PendingEventsPage/>}></Route>
       <Route path='/admin/expired-events' element={<ExpiredEventsPage/>}></Route>
       <Route path='/view/seatlayout/:id' element={<SeatLayout/>}></Route>
+      <Route path='/checkout' element={<CheckoutPage/>}></Route>
     </Routes>
     </BrowserRouter>
   )

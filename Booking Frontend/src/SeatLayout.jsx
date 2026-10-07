@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import Navbar from "./Navbar.jsx"
 import api from "./utlis/api.js";
 import { useSeatContext } from "./context/SeatContext.jsx";
+import { useNavigate } from "react-router-dom";
+import { socket } from "./utlis/socket.js";
 import "./SeatLayout.css"
 export function SeatLayout(){
     const {id}=useParams()
@@ -10,6 +12,7 @@ export function SeatLayout(){
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const {selectedSeats,setSelectedSeats}=useSeatContext()
+    const navigate=useNavigate()
     useEffect(()=>{
         const getEvent=async()=>{
             try{
@@ -156,7 +159,14 @@ export function SeatLayout(){
       type="button"
       className="checkout-button"
       onClick={() => {
+        const bookingData = {
+          event: event,
+          electedSeats: selectedSeats
+        };
+
+        localStorage.setItem("bookingData", JSON.stringify(bookingData));
         console.log("Proceed to checkout")
+        navigate("/checkout")
       }}
     >
       Proceed to Checkout

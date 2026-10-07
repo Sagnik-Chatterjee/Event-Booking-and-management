@@ -20,6 +20,9 @@ connectToDb()
 
     io.on("connection",(socket)=>{
         console.log("A user connected: ",socket.id)
+        socket.on('disconnect',(reason)=>{
+            console.log("User disconnected",socket.id," Reason:",reason)
+        })
     })
 
     httpServer.listen(8000,()=>{
