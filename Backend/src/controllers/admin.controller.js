@@ -44,7 +44,10 @@ const confirmPendingEvent=asyncHandler(async(req,res)=>{
 })
 const getExpiredEvents=asyncHandler(async(req,res)=>{
     try {
-        const events=await Event.find({date:{$lt:new Date()}})
+        const events=await Event.find({date:{$lt:new Date()}}).populate({
+  path: "owner",
+  select: "-password -refreshToken"
+});
         if(!events){
             throw new ApiError(500,"Some error occured")
         }
