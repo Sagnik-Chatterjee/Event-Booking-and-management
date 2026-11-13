@@ -5,7 +5,7 @@ import connectToDb from "./src/config/db.js";
 import "./src/config/redis.js"
 import http from 'http'
 import { Server } from "socket.io";
-
+import { registerSocketHandler } from "./src/socket/socketHandlers.ts";
 connectToDb()
 .then(()=>{
     const httpServer=http.createServer(app)
@@ -20,6 +20,7 @@ connectToDb()
 
     io.on("connection",(socket)=>{
         console.log("A user connected: ",socket.id)
+        registerSocketHandler(socket,io)
         socket.on('disconnect',(reason)=>{
             console.log("User disconnected",socket.id," Reason:",reason)
         })

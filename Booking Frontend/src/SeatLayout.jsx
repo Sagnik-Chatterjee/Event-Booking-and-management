@@ -6,11 +6,13 @@ import { useSeatContext } from "./context/SeatContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { socket } from "./utlis/socket.js";
 import "./SeatLayout.css"
+import toast from "react-hot-toast";
 export function SeatLayout(){
     const {id}=useParams()
     const[event,setEvent]=useState({})
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const[lockedSeats,setLockedSeats]=useState()
     const {selectedSeats,setSelectedSeats}=useSeatContext()
     const navigate=useNavigate()
     useEffect(()=>{
@@ -18,7 +20,6 @@ export function SeatLayout(){
             try{
                 setLoading(true)
             const response=await api.get(`http://localhost:8000/events/event/${id}`)
-            console.log(response.data.data[0])
             setEvent(response.data.data[0])
             setLoading(false)
             }catch(e){
@@ -32,6 +33,59 @@ export function SeatLayout(){
           prev.includes(seatNumber)? prev.filter((existing)=>existing!==seatNumber): [...prev,seatNumber]
         )
     }
+
+    //Socket Code starts
+    useEffect(()=>{
+      console.log("useEffect executed:", id);
+      setSelectedSeats([])
+      if (!id) return;
+      socket.emit("join-event",{eventId:id})
+      socket.on("locked-seats-initials",({seatIds})=>{
+        setLockedSeats(seatIds)
+      })
+      socket.on("seat-locked",({seatIds,eventId:incomingEventId,userId})=>{
+         if (incomingEventId !== id) {
+        return;
+    }
+
+    // Update locked seats
+    setLockedSeats((prev) => [
+        ...new Set([...prev, ...seatIds])
+    ]);
+
+    // Check whether the lock belongs to the current user
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (userId === user._id) {
+      console.log(event)
+        const bookingData = {
+            event: event,
+            electedSeats: seatIds
+        };
+
+        localStorage.setItem(
+            "bookingData",
+            JSON.stringify(bookingData)
+        );
+
+        navigate("/checkout");
+    }
+      })
+
+      socket.on('seat-unlocked',({eventId,seatIds,userId})=>{
+        if(eventId!==id){
+          return
+        }
+        setLockedSeats((prev)=>prev.filter((sid)=>!seatIds.includes(sid)))
+      })
+      socket.on("seat-lock-failed",({eventId,requested,alreadyLocked})=>{
+        toast.error(`Some seats are already locked: ${alreadyLocked.join(", ")}`)
+         setSelectedSeats((prev) =>
+        prev.filter((seatId) => !alreadyLocked.includes(seatId))
+    );
+      })
+    },[id,event])
+    console.log(lockedSeats)
 
     if (loading) {
     return <p>Loading seat layout...</p>;
@@ -58,59 +112,55 @@ export function SeatLayout(){
       <div className="seat-layout">
 
         {event.seatLayout.map((row, rowIndex) => {
-          const rowName = String.fromCharCode(
-            65 + rowIndex
-          );
+    const rowName = String.fromCharCode(65 + rowIndex);
 
-          return (
-            <div
-              className="seat-row"
-              key={rowName}
-            >
+    return (
+        <div className="seat-row" key={rowName}>
 
-              {/* Row number/name */}
-              <div className="row-label">
+            <div className="row-label">
                 {rowName}
-              </div>
+            </div>
 
-              {/* Seats */}
-              <div className="seats-container">
+            <div className="seats-container">
 
                 {row.map((seat) => {
 
-                  const isSelected =
-                    selectedSeats.includes(
-                      seat.seatNumber
+                    const isSelected = selectedSeats.includes(
+                        seat.seatNumber
                     );
 
-                  const isAvailable =
-                    seat.status === "Available";
+                    const isLocked = lockedSeats.includes(
+                        seat.seatNumber
+                    );
 
-                  return (
-                    <button
-                      key={seat.seatNumber}
-                      type="button"
-                      className={`seat
-                        ${isSelected ? "selected" : ""}
-                        ${!isAvailable ? "booked" : ""}
-                      `}
-                      disabled={!isAvailable}
-                      onClick={() =>
-                        handleSelectSeat(
-                          rowName,
-                          seat.seatNumber
-                        )
-                      }
-                    >
-                      {seat.seatNumber}
-                    </button>
-                  );
+                    const isAvailable = seat.status === "Available";
+
+                    return (
+                        <button
+                            key={seat.seatNumber}
+                            type="button"
+                            className={`seat
+                                ${isSelected ? "selected" : ""}
+                                ${!isAvailable ? "booked" : ""}
+                                ${isLocked ? "locked" : ""}
+                            `}
+                            disabled={!isAvailable || isLocked}
+                            onClick={() =>
+                                handleSelectSeat(
+                                    rowName,
+                                    seat.seatNumber
+                                )
+                            }
+                        >
+                            {seat.seatNumber}
+                        </button>
+                    );
                 })}
 
-              </div>
             </div>
-          );
-        })}
+        </div>
+    );
+})}
 
       </div>
 
@@ -159,14 +209,23 @@ export function SeatLayout(){
       type="button"
       className="checkout-button"
       onClick={() => {
-        const bookingData = {
-          event: event,
-          electedSeats: selectedSeats
-        };
+        const user = JSON.parse(localStorage.getItem("user"));
 
-        localStorage.setItem("bookingData", JSON.stringify(bookingData));
-        console.log("Proceed to checkout")
-        navigate("/checkout")
+    if (!user || !user._id) {
+      toast.error("Please login first");
+      return;
+    }
+
+    if (selectedSeats.length === 0) {
+      toast.error("Please select seats");
+      return;
+    }
+
+    socket.emit("lock-seats", {
+      eventId: id,
+      seatIds: selectedSeats,
+      userId: user._id
+    });
       }}
     >
       Proceed to Checkout

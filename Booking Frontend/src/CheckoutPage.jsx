@@ -1,10 +1,36 @@
 
 import "./CheckoutPage.css";
-
+import { useEffect,useState } from "react";
+import { socket } from "./utlis/socket";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 export const CheckoutPage = () => {
   const bookingData = JSON.parse(localStorage.getItem("bookingData"));
   const user = JSON.parse(localStorage.getItem("user"));
+    const { event, electedSeats } = bookingData;
+  const [timeLeft,setTimeLeft]=useState(300)
+  const navigate=useNavigate()
+  useEffect(()=>{
+    const interval=setInterval(()=>{
+      setTimeLeft(prev=>{
+        if(prev<=1){
+          clearInterval(interval)
+          socket.emit("unlock-seats",{
+            eventId:event._id,
+            seatIds:electedSeats,
+            userId:user._id,
 
+          })
+          toast.error("Time expired")
+          navigate("/")
+          return 0;
+        }
+        return prev-1;
+      })
+    },1000)
+    return ()=>clearInterval(interval)
+  },[])
+  
   if (!bookingData) {
     return (
       <div className="checkout-page">
@@ -15,13 +41,15 @@ export const CheckoutPage = () => {
       </div>
     );
   }
+  
 
-  const { event, electedSeats } = bookingData;
+
 
   const totalAmount = event.price * electedSeats.length;
 
   return (
     <div className="checkout-page">
+    <p>Time left:{String(Math.floor(timeLeft/60)).padStart(2,"0")}:{String(Math.floor(timeLeft%60)).padStart(2,"0")}</p>
   <h1 className="checkout-title">Checkout</h1>
 
   <div className="checkout-container">

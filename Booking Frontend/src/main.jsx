@@ -5,9 +5,7 @@ import App from './App.jsx'
 import { SeatContextProvider } from './context/SeatContext.jsx'
 
 createRoot(document.getElementById('root')).render(
-<StrictMode>
     <SeatContextProvider>
     <App />
     </SeatContextProvider>
-    </StrictMode>
 )

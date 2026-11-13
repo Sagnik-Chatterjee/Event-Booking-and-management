@@ -11,11 +11,13 @@ import { PendingEventsPage } from './PendinEventsPage.jsx'
 import { ExpiredEventsPage } from './ExpiredEventsPage.jsx'
 import { SeatLayout } from './SeatLayout.jsx'
 import { CheckoutPage } from './CheckoutPage.jsx'
+import { Toaster } from 'react-hot-toast'
 import './App.css'
 
 function App() {
 
   return (
+    <>
     <BrowserRouter>
     <Routes>
       <Route path='/login' element={<LoginPage/>}/>
@@ -31,6 +33,8 @@ function App() {
       <Route path='/checkout' element={<CheckoutPage/>}></Route>
     </Routes>
     </BrowserRouter>
+    <Toaster position='top-right'/>
+    </>
   )
 }
 

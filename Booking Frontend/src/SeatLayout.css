@@ -277,6 +277,13 @@
   background: #1d4ed8;
   transform: translateY(-1px);
 }
+.seat.locked {
+    background-color: #f39c12;
+    color: white;
+    border: 1px solid #e67e22;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
 
 /* MOBILE */
 
