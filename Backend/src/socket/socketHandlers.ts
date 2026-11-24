@@ -60,7 +60,7 @@ export const registerSocketHandler= (socket:Socket, io:Server)=>{
         for(const seatId of seatIds){
             const seatLockKey=`seat-lock:${eventId}:${seatId}`
             //Store seat lock with TTL=5min
-            await redis.setex(seatLockKey,30,userId)
+            await redis.setex(seatLockKey,300,userId)
             //Add seat to locked seats Set
             await redis.sadd(lockedSeatsKeys,seatId)
         }
