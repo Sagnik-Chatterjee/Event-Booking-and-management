@@ -80,31 +80,18 @@ const getEventById=asyncHandler(async(req,res)=>{
 
 const checkout=asyncHandler(async(req,res)=>{
     const {RAZORPAY_ID_KEY,RAZORPAY_SECRET_KEY}=process.env
-    const razorpayInstance={key_id:RAZORPAY_ID_KEY, key_secret:RAZORPAY_SECRET_KEY}
+    const razorpayInstance=new Razorpay({key_id:RAZORPAY_ID_KEY, key_secret:RAZORPAY_SECRET_KEY})
     const{amount,seats}=req.body
     const{id}=req.params
     const user_id=req.user._id
     const user= await User.findById(user_id)
-    const options={amount:amount, currency:'INR', receipt:user.email}
-    razorpayInstance.orders.create(options,async(err,order)=>{
+    const options={amount:amount*100, currency:'INR', receipt:user.email}
+    const order=await razorpayInstance.orders.create(options,async(err,ord)=>{
         if(!err){
-            const seatLayout = generateSeatLayout(rows, columns, seats);
-
-            const updatedEvent = await Event.findByIdAndUpdate(id,
-                {
-                    $set: {
-                        seatLayout: seatLayout
-                    }
-                },
-                { new: true }
-            );
-            const ticket=await Ticket.create({owner:user_id,event:id,noOfSeats:seats.length,seats:seats})
-            if(!ticket){
-                throw new ApiError(500,"Something went wrong")
-            }
-            return res.status(200).json(new ApiResponse(200,"Ticket booked"))
+            console.log(ord)
+            return res.status(200).json(new ApiResponse(200,"Order created"))
         }else{
-            throw new ApiError(400,"Payment failed")
+            throw new ApiError(400,"Order creation failed")
         }
     })
 })
