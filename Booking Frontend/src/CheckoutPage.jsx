@@ -4,6 +4,7 @@ import { useEffect,useState } from "react";
 import { socket } from "./utlis/socket";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import api from "./utlis/api";
 export const CheckoutPage = () => {
   const bookingData = JSON.parse(localStorage.getItem("bookingData"));
   const user = JSON.parse(localStorage.getItem("user"));
@@ -46,6 +47,15 @@ export const CheckoutPage = () => {
 
 
   const totalAmount = event.price * electedSeats.length;
+
+  const proceedCheckout=async()=>{
+    const response=await api.post(`http://localhost:8000/events/event/checkout/${bookingData.event._id}`,{amount:totalAmount,seats:bookingData.electedSeats})
+    if(response.status==200){
+      console.log("Razorpay order created")
+    }else{
+      console.log("Some error occured code:",response.status)
+    }
+  }
 
   return (
     <div className="checkout-page">
@@ -179,6 +189,7 @@ export const CheckoutPage = () => {
             className="checkout-proceed-pay-button"
             onClick={() => {
               console.log("Proceeding to payment...");
+              proceedCheckout()
             }}
           >
             Proceed to Pay
