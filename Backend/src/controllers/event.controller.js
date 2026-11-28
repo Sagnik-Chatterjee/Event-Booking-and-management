@@ -86,14 +86,9 @@ const checkout=asyncHandler(async(req,res)=>{
     const user_id=req.user._id
     const user= await User.findById(user_id)
     const options={amount:amount*100, currency:'INR', receipt:user.email}
-    const order=await razorpayInstance.orders.create(options,async(err,ord)=>{
-        if(!err){
-            console.log(ord)
-            return res.status(200).json(new ApiResponse(200,"Order created"))
-        }else{
-            throw new ApiError(400,"Order creation failed")
-        }
-    })
+    const order=await razorpayInstance.orders.create(options)
+    console.log(order)
+    return res.status(200).json(new ApiResponse(200,order,"Order"))
 })
 
 
