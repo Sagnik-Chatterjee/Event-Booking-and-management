@@ -49,12 +49,49 @@ export const CheckoutPage = () => {
   const totalAmount = event.price * electedSeats.length;
 
   const proceedCheckout=async()=>{
+    try{
     const response=await api.post(`http://localhost:8000/events/event/checkout/${bookingData.event._id}`,{amount:totalAmount,seats:bookingData.electedSeats})
     if(response.status==200){
       console.log("Razorpay order created")
+      console.log(response.data)
+      const order=response.data.data
+      const options = {
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+
+                amount: order.amount,
+                currency: order.currency,
+
+                name: "Event Booking",
+                description: bookingData.event.title,
+
+                order_id: order.id,
+
+                handler: async function (paymentResponse) {
+                    console.log("Payment successful!");
+                    console.log(paymentResponse);
+
+                    // Next: Call backend payment verification API
+                },
+
+                prefill: {
+                    name: user.fullName,
+                    email: user.email
+                },
+
+                theme: {
+                    color: "#3399cc"
+                }
+            };
+            const razorpay = new window.Razorpay(options);
+
+            razorpay.open();
     }else{
       console.log("Some error occured code:",response.status)
     }
+  }
+  catch(e){
+    console.log(e)
+  }
   }
 
   return (
